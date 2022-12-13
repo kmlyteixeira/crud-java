@@ -9,9 +9,9 @@ public abstract class DAO {
     private static Connection connection;
 
     public static Connection getConnection() throws SQLException {
-        if (connection == null || !connection.isClosed()) {
+        if (connection == null || connection.isClosed() == true) {
             connection = createConnection();
-        }
+        } 
 
         return connection;
     }
@@ -27,7 +27,7 @@ public abstract class DAO {
             return connection;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        } 
     }
 
     public static void closeConnection() {
