@@ -32,6 +32,8 @@ public class JFrameDeletarFornecedor extends JFrame{
                         comboFornecedor.getSelectedIndex()+1
                     );
                     JOptionPane.showMessageDialog(null, "Fornecedor Deletado com Sucesso!");
+                    new JFrameFornecedor();
+                    dispose();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Erro ao deletar Fornecedor: " + e.getMessage());
                 }
@@ -39,6 +41,16 @@ public class JFrameDeletarFornecedor extends JFrame{
         });
 
         buttonCancelar = new JButton("Cancelar");
+        buttonCancelar.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    new JFrameFornecedor();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                dispose();
+            }
+        });
 
         pane = this.getContentPane();
         pane.setLayout(new GridLayout(2,1));
