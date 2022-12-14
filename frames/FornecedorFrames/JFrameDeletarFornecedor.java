@@ -20,6 +20,12 @@ public class JFrameDeletarFornecedor extends JFrame{
         labelNome = new JLabel("Selecione o Fornecedor");
         comboFornecedor = new JComboBox<>();
 
+        if (Fornecedor.ListaFornecedores().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há Fornecedores cadastrados!");
+            new JFrameFornecedor();
+            dispose();
+        }
+
         Fornecedor.ListaFornecedores().forEach((fornecedor) -> {
             comboFornecedor.addItem(fornecedor.getNome());
         });

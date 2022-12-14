@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import db.DAO;
-import utils.DefineCampoUpdate;
 
 public class Pagamento {
 
@@ -31,6 +30,7 @@ public class Pagamento {
         ps.setBoolean(4, status);
         ps.setInt(5, fornecedor.getId());
         ps.execute();
+        ps.close();
     }
 
     public Pagamento(int id, String descricao, String data, double valor, boolean status, Fornecedor fornecedor) {
@@ -66,8 +66,8 @@ public class Pagamento {
         this.data = data;
     }
 
-    public double getValor() {
-        return valor;
+    public String getValor() {
+        return String.valueOf(valor);
     }
 
     public void setValor(double valor) {
@@ -90,17 +90,46 @@ public class Pagamento {
         this.fornecedor = fornecedor;
     }
 
-    public void getPagamentoById(int id) throws SQLException {
+    public static Pagamento getPagamentoById(int id) throws SQLException {
         PreparedStatement ps = DAO.getConnection().prepareStatement("SELECT * FROM pagamento WHERE id = ?");
         ps.setInt(1, id);
         ps.execute();
-        ps.close();
+
+        ResultSet rs = ps.getResultSet();
+        if (rs.next()) {
+            return new Pagamento(
+                    rs.getInt("id"),
+                    rs.getString("descricao"),
+                    rs.getString("data"),
+                    rs.getDouble("valor"),
+                    rs.getBoolean("status"),
+                    Fornecedor.getFornecedorById(rs.getInt("fornecedor_id"))
+            );
+        } else {
+            return null;
+        }
+
     }
 
-    public void AlteraPagamento(int tipo, String input) throws SQLException {
-        PreparedStatement ps = DAO.getConnection().prepareStatement("UPDATE pagamento SET "+DefineCampoUpdate.defineCampoUpdate(tipo)+" = ? WHERE id = ?");
-        ps.setString(1, input);
-        ps.setInt(2, id);
+    public void AlteraPagamento(int id, String data, String descricao, double valor) throws SQLException {
+
+        if (data == null) {
+            data = this.data;
+        } 
+
+        if (descricao == null) {
+            descricao = this.descricao;
+        }
+
+        if (valor == 0) {
+            valor = this.valor;
+        }
+
+        PreparedStatement ps = DAO.getConnection().prepareStatement("UPDATE pagamento SET data = ?, descricao = ?, valor = ? WHERE id = ?");
+        ps.setString(1, data);
+        ps.setString(2, descricao);
+        ps.setDouble(3, valor);
+        ps.setInt(4, id);
         ps.execute();
         ps.close();
     }

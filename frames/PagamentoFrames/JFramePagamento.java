@@ -79,7 +79,7 @@ public class JFramePagamento extends JFrame {
         pane.add(pane2);
         pane.add(pane3);
         
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(450,150);
         this.setResizable(false);
         this.setVisible(true);

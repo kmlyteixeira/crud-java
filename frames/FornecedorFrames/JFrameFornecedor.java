@@ -76,7 +76,7 @@ public class JFrameFornecedor extends JFrame {
         pane.add(pane2);
         pane.add(pane3);
         
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setSize(410,120);
         this.setResizable(false);
         this.setVisible(true);

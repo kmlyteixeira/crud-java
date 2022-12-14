@@ -24,6 +24,12 @@ public class JFrameListarPagamento extends JFrame {
         model.addColumn("Fornecedor");
         model.addColumn("Status");
 
+        if (Pagamento.ListaPagamentos().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há pagamentos cadastrados!");
+            new JFramePagamento();
+            dispose();
+        }
+
         Pagamento.ListaPagamentos().forEach((pagamento) -> {
             model.addRow(new Object[] {
                 pagamento.getId(),
@@ -47,7 +53,7 @@ public class JFrameListarPagamento extends JFrame {
         tableView.setVisible(true); 
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(310,220);
+        this.setSize(500,320);
         this.setResizable(true);
         this.setVisible(true);
     }

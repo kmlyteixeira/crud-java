@@ -7,10 +7,11 @@ import java.sql.SQLException;
 
 import classes.Fornecedor;
 import classes.Pagamento;
+
 /*
  * TODO: 
- * Fazer os Testes de inserção de dados
- */
+ * Ajustar alteração de pagamento
+*/
 
 public class JFrameCadastrarPagamento extends JFrame {
     private JLabel labelDta;
@@ -74,6 +75,12 @@ public class JFrameCadastrarPagamento extends JFrame {
         });
 
         buttonCancelar = new JButton("Cancelar");
+        buttonCancelar.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                new JFramePagamento();
+                dispose();
+            }
+        });
 
         pane = this.getContentPane();
         pane.setLayout(new GridLayout(2,1));
@@ -101,7 +108,7 @@ public class JFrameCadastrarPagamento extends JFrame {
         pane.add(pane3);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400,220);
+        this.setSize(500,320);
         this.setResizable(true);
         this.setVisible(true);
     }
