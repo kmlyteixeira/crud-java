@@ -41,11 +41,20 @@ public class Fornecedor {
         this.nome = nome;
     }
 
-    public void getFornecedorById(int id) throws SQLException {
+    public static Fornecedor getFornecedorById(int id) throws SQLException {
         PreparedStatement ps = DAO.getConnection().prepareStatement("SELECT * FROM fornecedor WHERE id = ?");
         ps.setInt(1, id);
         ps.execute();
         ps.close();
+
+        Fornecedor forn = null;
+
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            forn = new Fornecedor(rs.getInt("id"), rs.getString("nome"));
+        }
+
+        return forn;
     }
 
     public static void AlteraFornecedor(int id, String nome) throws SQLException {

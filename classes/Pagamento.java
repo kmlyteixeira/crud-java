@@ -3,6 +3,7 @@ package classes;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import db.DAO;
 import utils.DefineCampoUpdate;
@@ -16,16 +17,7 @@ public class Pagamento {
     private boolean status;
     private Fornecedor fornecedor;
 
-    public Pagamento(String descricao, String data, double valor, boolean status, Fornecedor fornecedor) {
-        this.descricao = descricao;
-        this.data = data;
-        this.valor = valor;
-        this.status = status;
-        this.fornecedor = fornecedor;
-    }
-
-    public Pagamento(int id, String descricao, String data, double valor, boolean status, Fornecedor fornecedor) throws SQLException {
-        this.id = id;
+    public Pagamento(String descricao, String data, double valor, boolean status, Fornecedor fornecedor) throws SQLException {
         this.descricao = descricao;
         this.data = data;
         this.valor = valor;
@@ -39,6 +31,15 @@ public class Pagamento {
         ps.setBoolean(4, status);
         ps.setInt(5, fornecedor.getId());
         ps.execute();
+    }
+
+    public Pagamento(int id, String descricao, String data, double valor, boolean status, Fornecedor fornecedor) {
+        this.id = id;
+        this.descricao = descricao;
+        this.data = data;
+        this.valor = valor;
+        this.status = status;
+        this.fornecedor = fornecedor;
     }
 
     public int getId() {
@@ -104,22 +105,34 @@ public class Pagamento {
         ps.close();
     }
 
-    public void DeletaPagamento() throws SQLException {
+    public static void DeletaPagamento(int id) throws SQLException {
         PreparedStatement ps = DAO.getConnection().prepareStatement("DELETE FROM pagamento WHERE id = ?");
         ps.setInt(1, id);
         ps.execute();
         ps.close();
     }
 
-    public void ListaPagamentos() throws SQLException {
-        PreparedStatement ps = DAO.getConnection().prepareStatement("SELECT * FROM pagamento");
-        ps.execute();
-        ps.close();
+    public static ArrayList<Pagamento> ListaPagamentos() throws SQLException {
 
-        ResultSet rs = ps.getResultSet();
+        ArrayList<Pagamento> pagamentos = new ArrayList<Pagamento>();
+
+        PreparedStatement ps = DAO.getConnection().prepareStatement("SELECT * FROM pagamento");
+
+        ResultSet rs = ps.executeQuery();
         while (rs.next()) {
-            System.out.println(this);
+            pagamentos.add(
+                    new Pagamento(
+                            rs.getInt("id"),
+                            rs.getString("descricao"),
+                            rs.getString("data"),
+                            rs.getDouble("valor"),
+                            rs.getBoolean("status"),
+                            Fornecedor.getFornecedorById(rs.getInt("fornecedor_id"))
+                    )
+            );
         }
+
+        return pagamentos;
     }
 
     @Override

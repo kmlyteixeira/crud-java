@@ -36,12 +36,25 @@ public class JFrameAlterarFornecedor extends JFrame{
                         textNome.getText()
                     );
                     JOptionPane.showMessageDialog(null, "Fornecedor Alterado com Sucesso!");
+                    new JFrameFornecedor();
+                    dispose();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Erro ao alterar Fornecedor: " + e.getMessage());
+                    dispose();
                 }
             }
         });
         buttonCancelar = new JButton("Cancelar");
+        buttonCancelar.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    new JFrameFornecedor();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                dispose();
+            }
+        });
 
         pane = this.getContentPane();
         pane.setLayout(new GridLayout(2,1));

@@ -3,6 +3,7 @@ package frames.FornecedorFrames;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import classes.Fornecedor;
 
@@ -26,12 +27,25 @@ public class JFrameCadastrarFornecedor extends JFrame{
                         textNome.getText()
                     );
                     JOptionPane.showMessageDialog(null, "Fornecedor Cadastrado com Sucesso!");
+                    new JFrameFornecedor();
+                    dispose();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Erro ao cadastrar Fornecedor: " + e.getMessage());
+                    dispose();
                 }
             }
         });
         buttonCancelar = new JButton("Cancelar");
+        buttonCancelar.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    new JFrameFornecedor();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                dispose();
+            }
+        });
 
         pane = this.getContentPane();
         pane.setLayout(new GridLayout(2,1));
