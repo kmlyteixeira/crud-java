@@ -1,11 +1,13 @@
 package frames;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import classes.Pagamento;
 import frames.FornecedorFrames.JFrameFornecedor;
 import frames.PagamentoFrames.JFramePagamento;
+import utils.TableRenderer;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -23,8 +25,8 @@ public class JFramePainelPrincipal extends JFrame {
     private JLabel labelNome;
     private JLabel labelNome2;
     private JLabel labelAux;
+    private JLabel labelAux2;
     private Container pane;
-    private JButton btnPagar;
 
     public JFramePainelPrincipal() throws SQLException {
         
@@ -73,7 +75,6 @@ public class JFramePainelPrincipal extends JFrame {
         model.addColumn("Valor");
         model.addColumn("Fornecedor");
         model.addColumn("Status");
-        model.addColumn("Ações");
 
         Pagamento.ListaPagamentos().forEach((pagamento) -> {
             model.addRow(new Object[] {
@@ -82,20 +83,14 @@ public class JFramePainelPrincipal extends JFrame {
                 pagamento.getDescricao(),
                 pagamento.getValor(),
                 pagamento.getFornecedor().getNome(),
-                pagamento.isStatus() ? "Pago" : "Não pago",
-                btnPagar = new JButton()
+                pagamento.isStatus() ? "Pago" : "Não pago"
             });
-        });
-
-        btnPagar.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JOptionPane.showMessageDialog(null, "Pagamento atualizado com sucesso!");
-            }
         });
 
         JTable tableView = new JTable(model);
         
-        tableView.setPreferredScrollableViewportSize(new Dimension(400,100));
+        tableView.setPreferredScrollableViewportSize(new Dimension(400,100)); 
+        tableView.setDefaultRenderer(getClass(), new TableRenderer());     
 
         pane = this.getContentPane();
         pane.setLayout(new FlowLayout());
@@ -108,8 +103,11 @@ public class JFramePainelPrincipal extends JFrame {
             pane.add(labelAux);
             tableView.setVisible(false);
         } else {
-            labelNome2 = new JLabel("Pagamentos cadastrados:");
+            labelNome2 = new JLabel("PAGAMENTOS PENDENTES:");
+            labelAux2 = new JLabel("Para acessar outras funcionalidades, use o MENU acima!");
+            pane.add(labelNome2);
             pane.add(tableView);
+            pane.add(labelAux2);
             tableView.setVisible(true);
             JScrollPane scrollPane = new JScrollPane(tableView);
             pane.add(scrollPane);
