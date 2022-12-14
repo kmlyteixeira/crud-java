@@ -23,6 +23,12 @@ public class JFrameAlterarFornecedor extends JFrame{
         textNome = new JTextField(25);
         comboFornecedor = new JComboBox<>();
 
+        if (Fornecedor.ListaFornecedores().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há Fornecedores cadastrados!");
+            new JFrameFornecedor();
+            dispose();
+        }
+
         Fornecedor.ListaFornecedores().forEach((fornecedor) -> {
             comboFornecedor.addItem(fornecedor.getNome());
         });

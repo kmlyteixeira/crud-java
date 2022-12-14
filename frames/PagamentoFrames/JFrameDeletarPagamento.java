@@ -6,10 +6,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import classes.Pagamento;
-/**
- * TODO:
- * Testar a deleção de dados
- */
 
 public class JFrameDeletarPagamento extends JFrame {
     private JLabel labelPagamento;
@@ -26,6 +22,12 @@ public class JFrameDeletarPagamento extends JFrame {
         super("Deletar Pagamento");
         labelPagamento = new JLabel("Selecione o pagamento a deletar: ");
         comboPagamento = new JComboBox<>();
+
+        if (Pagamento.ListaPagamentos().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há pagamentos cadastrados!");
+            new JFramePagamento();
+            dispose();
+        }
 
         Pagamento.ListaPagamentos().forEach((pagamento) -> {
             comboPagamento.addItem(pagamento.getDescricao());
@@ -50,6 +52,7 @@ public class JFrameDeletarPagamento extends JFrame {
         buttonCancelar.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 new JFramePagamento();
+                dispose();
             }
         });
 

@@ -5,11 +5,7 @@ import java.awt.*;
 import java.sql.SQLException;
 
 import classes.Pagamento;
-/**
- * TODO:
- * Adicionar função aos botões
- * Setar valores nos campos de texto
- */
+
 public class JFrameAlterarPagamento extends JFrame {
     private JLabel labelDta;
     private JLabel labelDescricao;
@@ -33,20 +29,53 @@ public class JFrameAlterarPagamento extends JFrame {
         labelPagamento = new JLabel("Selecione o pagamento a alterar: ");
         comboPagamento = new JComboBox<>();
 
+        if (Pagamento.ListaPagamentos().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há pagamentos cadastrados!");
+            new JFramePagamento();
+            dispose();
+        }
+
         Pagamento.ListaPagamentos().forEach((pagamento) -> {
             comboPagamento.addItem(pagamento.getDescricao());
         });
+
+        Pagamento pagamento = Pagamento.getPagamentoById(comboPagamento.getSelectedIndex()+1);
 
         labelDta = new JLabel("Data: ");    
         labelDescricao = new JLabel("Descrição: ");
         labelValor = new JLabel("Valor: ");
 
-        textDta = new JTextField();
-        textDescricao = new JTextField();
-        textValor = new JTextField();
+        textDta = new JTextField(pagamento.getData() + "");
+        textDescricao = new JTextField(pagamento.getDescricao() + "");
+        textValor = new JTextField(pagamento.getValor() + "");
 
         buttonSalvar = new JButton("Alterar");
+        buttonSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    Pagamento pagamento = Pagamento.getPagamentoById(comboPagamento.getSelectedIndex()+1);
+                    pagamento.AlteraPagamento(
+                        comboPagamento.getSelectedIndex()+1,
+                        textDta.getText(),
+                        textDescricao.getText(),
+                        Double.parseDouble(textValor.getText())
+                    );
+                    JOptionPane.showMessageDialog(null, "Pagamento Alterado com Sucesso!");
+                    new JFramePagamento();
+                    dispose();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(null, "Erro ao alterar Pagamento: " + e.getMessage());
+                    new JFramePagamento();
+                    dispose();
+                }
+            }
+        });
         buttonCancelar = new JButton("Cancelar");
+        buttonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dispose();
+            }
+        });
 
         pane = this.getContentPane();
         pane.setLayout(new GridLayout(2,1));
@@ -70,7 +99,7 @@ public class JFrameAlterarPagamento extends JFrame {
         pane.add(pane3);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400,220);
+        this.setSize(500,320);
         this.setResizable(true);
         this.setVisible(true);
     }

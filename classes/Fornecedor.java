@@ -44,8 +44,6 @@ public class Fornecedor {
     public static Fornecedor getFornecedorById(int id) throws SQLException {
         PreparedStatement ps = DAO.getConnection().prepareStatement("SELECT * FROM fornecedor WHERE id = ?");
         ps.setInt(1, id);
-        ps.execute();
-        ps.close();
 
         Fornecedor forn = null;
 

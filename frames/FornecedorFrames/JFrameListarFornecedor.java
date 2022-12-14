@@ -16,6 +16,12 @@ public class JFrameListarFornecedor extends JFrame {
         model.addColumn("ID");
         model.addColumn("Nome");
 
+        if (Fornecedor.ListaFornecedores().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não há fornecedores cadastrados!");
+            new JFrameFornecedor();
+            dispose();
+        }
+
         Fornecedor.ListaFornecedores().forEach((fornecedor) -> {
             model.addRow(new Object[] {
                 fornecedor.getId(),
